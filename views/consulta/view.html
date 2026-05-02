@@ -1,0 +1,359 @@
+<!--
+  Vista: Consulta
+  Carpeta: views/consulta
+  Este archivo es el HTML editable de la vista. Si lo
+  modificas manualmente, regenera también 'view.js' para
+  que los cambios se reflejen en el portal (o usa el
+  script 'regenerar_view_js.py' incluido en la raíz).
+-->
+<section class="view" id="view-consulta">
+    <div class="view-header">
+      <h1>Consulta de Trámites</h1>
+      <p>Busque un trámite para ver sus datos del sistema externo y completar información adicional</p>
+    </div>
+
+    <!-- BUSCADOR PRINCIPAL -->
+    <div class="consulta-search-box">
+      <div class="consulta-search-inner">
+        <div class="consulta-search-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <input class="consulta-search-input" id="consulta-input"
+          placeholder="Buscar por N° Trámite, Hospital, Lote o N° Solicitud…"
+          oninput="buscarTramiteConsulta()" autocomplete="off">
+        <button class="consulta-clear-btn" id="consulta-clear" onclick="limpiarConsulta()" style="display:none">✕</button>
+      </div>
+      <div class="consulta-hint">
+        <span class="hint-badge">Sistema externo</span>
+        Los campos resaltados en azul se extraen automáticamente del sistema IESS al momento de la integración
+      </div>
+    </div>
+
+    <!-- RESULTADOS DE BÚSQUEDA -->
+    <div id="consulta-resultados" style="display:none; margin-bottom:1.2rem">
+      <div class="card">
+        <div class="card-hd"><span id="consulta-res-titulo">Resultados</span></div>
+        <div style="overflow-x:auto">
+          <table class="tbl" id="tbl-consulta-res">
+            <thead><tr>
+              <th>Hospital</th><th>N° Trámite</th><th>Lote</th>
+              <th>Mes Atención</th><th># Expedientes</th><th>Tipo Afiliación</th><th>Estado</th>
+              <th>Acción</th>
+            </tr></thead>
+            <tbody id="tbody-consulta-res"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL DE CONSULTA / EDICIÓN DEL TRÁMITE -->
+    <div id="consulta-panel" style="display:none">
+
+      <!-- CABECERA DEL TRÁMITE CONSULTADO -->
+      <div class="consulta-header-tramite">
+        <div class="consulta-tramite-id">
+          <div class="consulta-tramite-badge">📡 Datos del Sistema Externo</div>
+          <h2 id="c-titulo-tramite">Trámite —</h2>
+          <p id="c-subtitulo-tramite" style="color:#64748b;font-size:13px"></p>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:center">
+          <span id="c-estado-badge" class="badge">—</span>
+          <button class="btn-outline btn-sm" onclick="cerrarConsulta()">✕ Cerrar</button>
+        </div>
+      </div>
+
+      <!-- BLOQUE AZUL OSCURO: DATOS DEL SISTEMA EXTERNO (read-only) -->
+      <div class="bloque bloque-sistema">
+        <div class="bloque-hd">
+          <div class="dot sistema"></div>
+          <h3>Datos extraídos del Sistema Externo</h3>
+          <span class="bloque-tag sistema-tag">🔗 INTEGRACIÓN AUTOMÁTICA — Solo lectura</span>
+        </div>
+        <div class="sistema-grid">
+          <div class="sistema-field">
+            <label>Hospital</label>
+            <div class="sistema-value" id="c-hospital">—</div>
+          </div>
+          <div class="sistema-field">
+            <label>IESS / Subdirección</label>
+            <div class="sistema-value" id="c-iess-sub">—</div>
+          </div>
+          <div class="sistema-field">
+            <label>Oficio del Hospital</label>
+            <div class="sistema-value" id="c-oficio-hospital">—</div>
+          </div>
+          <div class="sistema-field">
+            <label># Solicitud</label>
+            <div class="sistema-value" id="c-num-solicitud">—</div>
+          </div>
+          <div class="sistema-field">
+            <label>RC (Responsabilidad Compartida)</label>
+            <div class="sistema-value" id="c-rc">—</div>
+          </div>
+          <div class="sistema-field">
+            <label>Mes de Atención</label>
+            <div class="sistema-value" id="c-mes-atencion">—</div>
+          </div>
+          <div class="sistema-field">
+            <label>Número de Trámite</label>
+            <div class="sistema-value sistema-value-accent" id="c-numero-tramite">—</div>
+          </div>
+          <div class="sistema-field">
+            <label>Lote</label>
+            <div class="sistema-value" id="c-lote">—</div>
+          </div>
+          <div class="sistema-field">
+            <label># Expedientes</label>
+            <div class="sistema-value" id="c-expedientes">—</div>
+          </div>
+          <div class="sistema-field">
+            <label>Tipo de Afiliación</label>
+            <div class="sistema-value" id="c-tipo-afiliacion">—</div>
+          </div>
+          <div class="sistema-field sistema-field-wide">
+            <label>Procedimiento Hospital (del archivo)</label>
+            <div class="sistema-value" id="c-procedimiento-hospital">—</div>
+          </div>
+          <div class="sistema-field sistema-field-wide">
+            <label>Procedimiento para Informes</label>
+            <div class="sistema-value" id="c-procedimiento-informes">—</div>
+          </div>
+        </div>
+        <div class="sistema-sync-footer">
+          <span class="sync-dot"></span>
+          <span id="c-sync-fecha">Última sincronización: —</span>
+          <button class="btn-sync" onclick="simularSincronizacion()">⟳ Sincronizar</button>
+        </div>
+      </div>
+
+      <!-- FORMULARIO DE INFORMACIÓN ADICIONAL -->
+      <form id="form-consulta-adicional" onsubmit="guardarConsultaAdicional(event)">
+        <input type="hidden" id="c-tramite-id" value="">
+
+        <!-- BLOQUE VERDE: Valores Financieros -->
+        <div class="bloque bloque-verde">
+          <div class="bloque-hd">
+            <div class="dot verde"></div>
+            <h3>Valores Financieros</h3>
+            <span class="bloque-tag">Verde — Completar / Actualizar</span>
+          </div>
+          <div class="fg fg-4">
+            <div class="fg-item">
+              <label>Valor Presentado ($)</label>
+              <input type="number" name="valor_presentado" step="0.01" min="0" placeholder="0.00" oninput="autoCalcConsulta()">
+            </div>
+            <div class="fg-item">
+              <label>IVA Presentado ($)</label>
+              <input type="number" name="iva" step="0.01" min="0" placeholder="0.00" oninput="autoCalcConsulta()">
+            </div>
+            <div class="fg-item">
+              <label>Valor sin IVA ($)</label>
+              <input type="number" name="valor_sin_iva" step="0.01" placeholder="Auto" id="c-siniva" readonly>
+            </div>
+            <div class="fg-item">
+              <label>Valor Presentado sin Auditoría ($)</label>
+              <input type="number" name="valor_pres_sin_audit" step="0.01" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Parte</label>
+              <input type="text" name="parte" placeholder="1/2, 2/2…">
+            </div>
+            <div class="fg-item">
+              <label>Factura Manual</label>
+              <input type="text" name="factura_manual" placeholder="N° factura">
+            </div>
+            <div class="fg-item">
+              <label>Fecha Parte</label>
+              <input type="date" name="fecha_parte">
+            </div>
+            <div class="fg-item">
+              <label>Fecha de Factura</label>
+              <input type="date" name="fecha_factura">
+            </div>
+            <div class="fg-item">
+              <label>Abono Base ($)</label>
+              <input type="number" name="abono_base" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Abono IVA ($)</label>
+              <input type="number" name="abono_iva" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Saldo 40%-30%-10% Cancelado ($)</label>
+              <input type="number" name="saldo" step="0.01" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Fecha de Entrega</label>
+              <input type="date" name="fecha_entrega">
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOQUE AZUL: Apelaciones -->
+        <div class="bloque bloque-azul">
+          <div class="bloque-hd">
+            <div class="dot azul"></div>
+            <h3>Apelaciones y Liquidación IESS</h3>
+            <span class="bloque-tag">Azul — Completar</span>
+          </div>
+          <div class="fg fg-4">
+            <div class="fg-item">
+              <label>Fecha Apelación</label>
+              <input type="date" name="fecha_apelacion">
+            </div>
+            <div class="fg-item">
+              <label>Cancelación de Apelaciones ($)</label>
+              <input type="number" name="cancelacion_apelaciones" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Val. Reclamado según IESS ($)</label>
+              <input type="number" name="val_reclamado_iess" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Val. Aprobado según Liquidación IESS ($)</label>
+              <input type="number" name="val_aprobado_iess" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>IVA Aprobado ($)</label>
+              <input type="number" name="iva_aprobado" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Diferencia Reclamada al IESS ($)</label>
+              <input type="number" name="diferencia_reclamada" step="0.01" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Val. Regularizado luego de Apelación ($)</label>
+              <input type="number" name="val_regularizado_apel" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Oficio Hospital por Apelaciones</label>
+              <input type="text" name="oficio_apelaciones" placeholder="N° oficio">
+            </div>
+            <div class="fg-item">
+              <label>N° Oficio Solicitud Objeción al IESS</label>
+              <input type="text" name="oficio_solicitud_objec" placeholder="N° oficio">
+            </div>
+            <div class="fg-item">
+              <label>Fecha Oficio Solicitud Objeción</label>
+              <input type="date" name="fecha_oficio_solicitud_objec">
+            </div>
+            <div class="fg-item">
+              <label>N° Oficio Respuesta del IESS</label>
+              <input type="text" name="oficio_respuesta_iess" placeholder="N° oficio">
+            </div>
+            <div class="fg-item">
+              <label>Fecha Respuesta del IESS</label>
+              <input type="date" name="fecha_respuesta_iess">
+            </div>
+            <div class="fg-item">
+              <label>Val. Levantado según Liquidación IESS ($)</label>
+              <input type="number" name="val_levantado_iess" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>IVA Levantamiento ($)</label>
+              <input type="number" name="iva_levantamiento" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Fecha Notificación Hospital</label>
+              <input type="date" name="fecha_notif_hospital">
+            </div>
+            <div class="fg-item">
+              <label>Fecha en que debe responder el Hospital</label>
+              <input type="date" name="fecha_debe_responder_hosp">
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOQUE PLOMO: Glosas y Objeciones -->
+        <div class="bloque bloque-plomo">
+          <div class="bloque-hd">
+            <div class="dot plomo"></div>
+            <h3>Glosas, Objeciones y Estado</h3>
+            <span class="bloque-tag">Plomo — Completar</span>
+          </div>
+          <div class="fg fg-4">
+            <div class="fg-item">
+              <label>Objeción Apelada ($)</label>
+              <input type="number" name="objecion_apelada" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Objeción Aceptada ($)</label>
+              <input type="number" name="objecion_aceptada" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Objeción sin Respuesta de Hospitales ($)</label>
+              <input type="number" name="objecion_sin_respuesta" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Objeción según IESS ($)</label>
+              <input type="number" name="objecion_iess" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Glosa Final para Informes ($)</label>
+              <input type="number" name="glosa_final_inf" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Saldo por Cobrar ($)</label>
+              <input type="number" name="saldo_cobrar" step="0.01" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>IVA Glosado ($)</label>
+              <input type="number" name="iva_glosado" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>IVA Auditado ($)</label>
+              <input type="number" name="iva_auditado" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Total Aprobado sin Pago ($)</label>
+              <input type="number" name="total_aprobado_sin_pago" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Val. Cancelado Total para Informes ($)</label>
+              <input type="number" name="val_cancelado_total_inf" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="fg-item">
+              <label>Estado Hospital</label>
+              <select name="estado_hospital">
+                <option value="">Seleccionar…</option>
+                <option>AUDITADO</option><option>NO AUDITADO</option>
+                <option>SIN RESPUESTA IESS</option><option>SIN RESPUESTA JBG</option>
+                <option>SIN RESPUESTA</option><option>GLOSA</option><option>LEVANTADO</option>
+                <option>CON RESPUESTA</option><option>LEVANTADO NO AUDITADO</option>
+                <option>LEVANTADO PAGADO</option><option>PAGADO</option>
+                <option>APELADO</option><option>DIFERENCIAS</option>
+              </select>
+            </div>
+            <div class="fg-item">
+              <label>Estado del Trámite</label>
+              <select name="estado">
+                <option value="">Seleccionar…</option>
+                <option value="proceso">En Proceso</option>
+                <option value="aprobado">Aprobado</option>
+                <option value="apelacion">En Apelación</option>
+                <option value="objetado">Objetado</option>
+                <option value="cancelado">Cancelado</option>
+                <option value="glosa">Glosa</option>
+              </select>
+            </div>
+            <div class="fg-item" style="grid-column:span 2">
+              <label>Observación / Notas</label>
+              <textarea name="observacion" rows="2" placeholder="Observaciones adicionales…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-outline" onclick="cerrarConsulta()">✕ Cancelar</button>
+          <button type="submit" class="btn-primary">✓ Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ESTADO VACÍO -->
+    <div id="consulta-empty" class="consulta-empty">
+      <div class="consulta-empty-icon">🔍</div>
+      <h3>Busque un trámite para consultar</h3>
+      <p>Escriba el número de trámite, hospital o lote en el buscador de arriba.<br>Los campos del sistema externo se cargarán automáticamente.</p>
+    </div>
+  </section>

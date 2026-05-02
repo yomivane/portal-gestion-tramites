@@ -1,0 +1,93 @@
+<!--
+  Vista: Reporte de Oficios
+  Carpeta: views/rpt-oficios
+  Este archivo es el HTML editable de la vista. Si lo
+  modificas manualmente, regenera también 'view.js' para
+  que los cambios se reflejen en el portal (o usa el
+  script 'regenerar_view_js.py' incluido en la raíz).
+-->
+<section class="view" id="view-rpt-oficios">
+    <div class="view-header">
+      <h1>Reporte de Oficios</h1>
+      <p>Consulta, búsqueda e impresión de todos los oficios generados</p>
+    </div>
+
+    <div class="filter-bar">
+      <input class="finput" id="f-rpt-oficio-buscar" placeholder="🔍 Buscar por N° oficio, hospital, institución…" oninput="filtrarRptOficios()">
+      <select class="fsel" id="f-rpt-oficio-hosp" onchange="filtrarRptOficios()">
+        <option value="">Todos los hospitales</option>
+        <option>Hospital Luis Vernaza</option>
+        <option>Hospital Alfredo Paulson</option>
+        <option>Instituto de Neurociencias</option>
+        <option>Hospital Roberto Gilbert</option>
+        <option>Dispensario Benedicto XVI</option>
+        <option>JBG</option>
+      </select>
+      <input class="finput" type="month" id="f-rpt-oficio-mes" style="flex:0 0 160px" onchange="filtrarRptOficios()" title="Filtrar por mes">
+      <button class="btn-sm btn-outline" onclick="exportarRptOficios()">⬇ Exportar CSV</button>
+    </div>
+
+    <!-- KPIs de oficios -->
+    <div class="kpi-row" style="margin-bottom:1.2rem">
+      <div class="kpi kpi-azul" style="flex:1">
+        <div class="kpi-icon">✉</div>
+        <div class="kpi-body"><div class="kpi-num" id="ro-total">0</div><div class="kpi-lbl">Total Oficios</div></div>
+      </div>
+      <div class="kpi kpi-verde" style="flex:1">
+        <div class="kpi-icon">🏥</div>
+        <div class="kpi-body"><div class="kpi-num" id="ro-hospitales">0</div><div class="kpi-lbl">Hospitales Distintos</div></div>
+      </div>
+      <div class="kpi kpi-plomo" style="flex:1">
+        <div class="kpi-icon">$</div>
+        <div class="kpi-body"><div class="kpi-num" id="ro-valor">$0</div><div class="kpi-lbl">Valor Total Remitido</div></div>
+      </div>
+      <div class="kpi kpi-morado" style="flex:1">
+        <div class="kpi-icon">📋</div>
+        <div class="kpi-body"><div class="kpi-num" id="ro-expedientes">0</div><div class="kpi-lbl">Total Expedientes</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd">
+        <span>Listado de Oficios Generados</span>
+        <span id="ro-count-lbl" style="font-size:11px;color:#94a3b8">0 registros</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="tbl" id="tbl-rpt-oficios">
+          <thead><tr>
+            <th>#</th>
+            <th>N° Oficio</th>
+            <th>Fecha</th>
+            <th>Hospital</th>
+            <th>Institución</th>
+            <th>Mes Atención</th>
+            <th>N° Expedientes</th>
+            <th>Valor ($)</th>
+            <th>Firmante</th>
+            <th>Cargo Firmante</th>
+            <th>Acciones</th>
+          </tr></thead>
+          <tbody id="tbody-rpt-oficios"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PANEL DE VISTA PREVIA DE OFICIO (modal-style inline) -->
+    <div id="rpt-oficio-preview-panel" style="display:none; margin-top:1.2rem">
+      <div class="card">
+        <div class="card-hd">
+          <span id="rpt-preview-titulo">Vista Previa del Oficio</span>
+          <div style="display:flex;gap:.5rem">
+            <button class="btn-sm btn-primary" onclick="imprimirOficioRpt()">🖨 Imprimir / PDF</button>
+            <button class="btn-sm btn-outline" onclick="cerrarPreviewRpt()">✕ Cerrar</button>
+          </div>
+        </div>
+        <div style="padding:1.5rem; background:#f8fafc">
+          <div class="oficio-doc" id="rpt-oficio-doc" style="max-width:750px;margin:0 auto">
+            <!-- Se renderiza dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>

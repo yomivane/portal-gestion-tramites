@@ -1,0 +1,460 @@
+/* ================================================================
+   reports-financial.css
+   ----------------------------------------------------------------
+   Estilos compartidos por los 5 reportes financieros nuevos:
+     - MSP (Saldos por Cobrar Netos + Anticipo)
+     - IESS (Saldos por Cobrar + Anticipo)
+     - ISSFA / ISSPOL (Saldos por Cobrar)
+     - SPPAT (Saldos por Cobrar Netos)
+     - Expedientes por Financiador
+
+   Reproduce el look ejecutivo de las imágenes oficiales:
+   cabecera con logo + razón social, banda azul marino para los
+   encabezados de columna, fila destacada en verde lima para
+   el período acumulado, totales en azul oscuro y celdas en
+   miles de US$ con tipografía monoespacio para los números.
+   ================================================================ */
+
+/* ──────────── Cabecera institucional (logo + título) ──────────── */
+.rpt-fin-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  padding: 18px 22px 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #fafbfd 100%);
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--r) var(--r) 0 0;
+}
+.rpt-fin-logo {
+  width: 78px; height: 78px;
+  background: url("../img/logo-jbg.png") center/contain no-repeat;
+  flex-shrink: 0;
+}
+.rpt-fin-titles {
+  flex: 1;
+  padding-top: 6px;
+}
+.rpt-fin-titles .ent {
+  font-family: 'Playfair Display', serif;
+  color: var(--azul);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: .005em;
+  line-height: 1.15;
+  margin-bottom: 4px;
+}
+.rpt-fin-titles .sub {
+  color: var(--jbg-azul-marino);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.rpt-fin-titles .meta {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 6px;
+}
+.rpt-fin-titles .meta strong { color: var(--text); font-style: normal; }
+
+/* ──────────── Tabla financiera ─────────────────────────────────── */
+.tbl-fin {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: #fff;
+}
+.tbl-fin th, .tbl-fin td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+/* Cabecera azul marino estilo informe oficial */
+.tbl-fin thead th {
+  background: linear-gradient(180deg, #1e3a8a 0%, var(--jbg-azul-marino) 100%);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: .03em;
+  font-size: 11.5px;
+  border-bottom: 2px solid var(--jbg-dorado);
+  padding: 9px 8px;
+}
+.tbl-fin thead th:first-child {
+  text-align: left;
+  padding-left: 14px;
+  width: 280px;
+}
+/* Columna del período acumulado destacada (2012-2015 / 2016-2026) */
+.tbl-fin thead th.col-acum {
+  background: linear-gradient(180deg, #0a1628 0%, #050d1c 100%);
+  border-left: 1px solid rgba(201, 161, 74, .3);
+  border-right: 1px solid rgba(201, 161, 74, .3);
+}
+
+/* Cuerpo */
+.tbl-fin tbody td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+.tbl-fin tbody td:first-child {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text);
+  padding-left: 14px;
+}
+
+/* Filas alternadas muy sutiles */
+.tbl-fin tbody tr:nth-child(even) td { background: #fafbfd; }
+.tbl-fin tbody tr:hover td { background: #f0f4fb; }
+
+/* Filas de TOTAL (negrita y borde superior) */
+.tbl-fin tr.row-total td {
+  font-weight: 700;
+  border-top: 2px solid var(--jbg-azul-marino);
+  background: #f1f5fb !important;
+  color: var(--jbg-azul-marino);
+}
+
+/* Fila de SALDO NETO (azul intenso, sin bordes blandos) */
+.tbl-fin tr.row-saldo td {
+  font-weight: 700;
+  color: var(--azul);
+  background: #e7eefb !important;
+  border-top: 2px solid var(--azul);
+  border-bottom: 2px solid var(--azul);
+  font-size: 12.5px;
+}
+
+/* Celdas del período acumulado destacadas en verde lima
+   (replica las celdas verdes de las imágenes oficiales) */
+.tbl-fin .col-acum,
+.tbl-fin tbody td.col-acum {
+  background: linear-gradient(135deg, #b9f088 0%, #87d756 100%) !important;
+  font-weight: 700;
+  color: #14532d;
+  border-left: 1px solid rgba(20, 83, 45, .15);
+  border-right: 1px solid rgba(20, 83, 45, .15);
+}
+.tbl-fin tr.row-saldo td.col-acum {
+  background: linear-gradient(135deg, #b9f088 0%, #87d756 100%) !important;
+  color: #14532d !important;
+}
+
+/* Celdas vacías (las imágenes muestran espacios cuando no hay valor) */
+.tbl-fin td.empty { color: transparent; }
+
+/* Valores negativos entre paréntesis (rojo institucional) */
+.tbl-fin td.neg { color: var(--rojo); }
+
+/* Última columna "Total" en blanco fondo gris */
+.tbl-fin th.col-total,
+.tbl-fin td.col-total {
+  background: #f8fafc;
+  font-weight: 700;
+  border-left: 2px solid var(--border);
+}
+.tbl-fin tr.row-saldo td.col-total {
+  background: #1e3a8a !important;
+  color: #fff !important;
+}
+
+/* ──────────── Banda de período / sección dentro del reporte ──── */
+.rpt-fin-band {
+  background: linear-gradient(90deg,
+    rgba(201, 161, 74, .14) 0%,
+    rgba(96, 165, 250, .08) 100%);
+  padding: 10px 16px;
+  border-left: 4px solid var(--jbg-dorado);
+  margin: 22px 0 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 14.5px;
+  color: var(--jbg-azul-marino);
+  font-weight: 700;
+  letter-spacing: .005em;
+}
+
+/* Pie de tabla con notas legales */
+.rpt-fin-footnote {
+  background: #fffbe7;
+  border: 1px solid #facc15;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 11.5px;
+  color: #5a4a08;
+  margin-top: 18px;
+  line-height: 1.55;
+}
+.rpt-fin-footnote strong { color: #78510a; }
+
+/* ──────────── Tarjeta general del reporte ─────────────────────── */
+.rpt-fin-card {
+  background: #fff;
+  border-radius: var(--r);
+  box-shadow: var(--sh-exec) !important;
+  overflow: hidden;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+}
+.rpt-fin-card .scroll-x {
+  overflow-x: auto;
+  width: 100%;
+}
+
+/* Filtros de período año (chips redondeados) */
+.rpt-year-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 12px 18px;
+  background: #fafbfd;
+  border-bottom: 1px solid var(--border);
+}
+.rpt-year-chips button {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 12px;
+  border-radius: 18px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+}
+.rpt-year-chips button:hover {
+  border-color: var(--azul);
+  color: var(--azul);
+}
+.rpt-year-chips button.active {
+  background: linear-gradient(135deg, var(--azul), #1e3a8a);
+  color: #fff;
+  border-color: var(--azul);
+  box-shadow: 0 2px 6px rgba(29, 78, 216, .3);
+}
+
+/* ──────────── Reporte de Anticipo (estructura especial) ──────── */
+.rpt-anticipo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  background: #fff;
+}
+.rpt-anticipo-grid .col-period {
+  border-right: 1px solid var(--border);
+}
+.rpt-anticipo-grid .col-period:last-child { border-right: none; }
+.rpt-anticipo-grid .col-head {
+  background: linear-gradient(180deg, #1e3a8a 0%, var(--jbg-azul-marino) 100%);
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  padding: 9px;
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  border-bottom: 2px solid var(--jbg-dorado);
+}
+.rpt-anticipo-grid .col-subh {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #f8fafc;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+.rpt-anticipo-grid .col-subh > div {
+  padding: 7px 12px;
+  text-align: center;
+}
+.rpt-anticipo-grid .col-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-size: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.rpt-anticipo-grid .col-row:nth-child(even) { background: #fafbfd; }
+.rpt-anticipo-grid .col-row > div {
+  padding: 6px 12px;
+}
+.rpt-anticipo-grid .col-row > div:first-child { color: var(--text-muted); }
+.rpt-anticipo-grid .col-row > div:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.rpt-anticipo-summary {
+  background: linear-gradient(135deg, #b9f088 0%, #87d756 100%);
+  padding: 14px 20px;
+  text-align: center;
+  font-weight: 700;
+  color: #14532d;
+  border-top: 2px solid #14532d;
+  font-size: 14px;
+}
+.rpt-anticipo-summary .label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.rpt-anticipo-summary .val {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  letter-spacing: -.005em;
+}
+
+.rpt-anticipo-final {
+  background: #fffbe7;
+  border-top: 2px solid #facc15;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.rpt-anticipo-final .pct-chip {
+  background: #fff;
+  border: 2px solid var(--azul);
+  border-radius: 50%;
+  width: 60px; height: 60px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-weight: 800;
+  color: var(--azul);
+  font-size: 16px;
+}
+.rpt-anticipo-final .anticipo-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #5a4a08;
+}
+.rpt-anticipo-final .anticipo-lab {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: #5a4a08;
+  font-weight: 700;
+}
+
+/* ──────────── Vista Expedientes (años apilados) ──────────────── */
+.exp-year-band {
+  background: linear-gradient(180deg, #1e3a8a 0%, var(--jbg-azul-marino) 100%);
+  color: var(--jbg-dorado-claro);
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 8px 0;
+  border-bottom: 2px solid var(--jbg-dorado);
+}
+.tbl-exp {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: #fff;
+}
+.tbl-exp th, .tbl-exp td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tbl-exp thead th {
+  background: #f1f5fb;
+  color: var(--jbg-azul-marino);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  text-align: center;
+  border-bottom: 2px solid var(--jbg-dorado);
+}
+.tbl-exp thead th:first-child,
+.tbl-exp tbody td:first-child {
+  text-align: left;
+  font-weight: 700;
+  color: var(--azul);
+}
+.tbl-exp tr.row-total td {
+  background: #1e3a8a !important;
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  border-top: 2px solid var(--jbg-dorado);
+}
+.tbl-exp tr.row-total td:first-child {
+  color: var(--jbg-dorado-claro);
+}
+.tbl-exp .col-tot { background: #f8fafc; font-weight: 700; }
+.tbl-exp .col-tot-prev { background: #fafbfd; color: var(--text-muted); }
+.tbl-exp .var-up { color: var(--verde); font-weight: 700; }
+.tbl-exp .var-down { color: var(--rojo); font-weight: 700; }
+.tbl-exp .var-flat { color: var(--text-muted); font-weight: 700; }
+
+/* ──────────── KPIs cabeza de los reportes ─────────────────────── */
+.rpt-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.rpt-kpi-card {
+  background: linear-gradient(135deg, #fff 0%, #fafbfd 100%);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--azul);
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: var(--sh-exec);
+}
+.rpt-kpi-card.kpi-verde { border-left-color: var(--verde); }
+.rpt-kpi-card.kpi-naranja { border-left-color: var(--naranja); }
+.rpt-kpi-card.kpi-dorado { border-left-color: var(--jbg-dorado); }
+.rpt-kpi-card .lbl {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.rpt-kpi-card .val {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--jbg-azul-marino);
+  font-weight: 700;
+  letter-spacing: -.005em;
+  line-height: 1.1;
+}
+.rpt-kpi-card .sub {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* ──────────── Botones de exportar ─────────────────────────────── */
+.rpt-fin-actions {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 14px 0;
+  padding: 10px 14px;
+  background: #fafbfd;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .rpt-anticipo-grid { grid-template-columns: 1fr; }
+  .rpt-anticipo-grid .col-period { border-right: none; border-bottom: 1px solid var(--border); }
+  .rpt-fin-header { flex-direction: column; gap: 12px; }
+  .rpt-fin-logo { width: 60px; height: 60px; }
+  .tbl-fin { font-size: 11px; }
+  .tbl-fin th, .tbl-fin td { padding: 5px 6px; }
+}

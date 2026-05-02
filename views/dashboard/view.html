@@ -1,0 +1,90 @@
+<!--
+  Vista: Dashboard
+  Carpeta: views/dashboard
+  Este archivo es el HTML editable de la vista. Si lo
+  modificas manualmente, regenera también 'view.js' para
+  que los cambios se reflejen en el portal (o usa el
+  script 'regenerar_view_js.py' incluido en la raíz).
+-->
+<section class="view active" id="view-dashboard">
+    <div class="view-header">
+      <h1>Panel de Control</h1>
+      <p>Junta de Beneficencia de Guayaquil — Dirección de Convenios del Sector Público</p>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi kpi-verde">
+        <div class="kpi-icon">✓</div>
+        <div class="kpi-body">
+          <div class="kpi-num" id="k-aprobados">0</div>
+          <div class="kpi-lbl">Trámites Aprobados</div>
+        </div>
+      </div>
+      <div class="kpi kpi-azul">
+        <div class="kpi-icon">$</div>
+        <div class="kpi-body">
+          <div class="kpi-num" id="k-valor">$0</div>
+          <div class="kpi-lbl">Valor Presentado Total</div>
+        </div>
+      </div>
+      <div class="kpi kpi-plomo">
+        <div class="kpi-icon">⟳</div>
+        <div class="kpi-body">
+          <div class="kpi-num" id="k-proceso">0</div>
+          <div class="kpi-lbl">En Proceso / Apelación</div>
+        </div>
+      </div>
+      <div class="kpi kpi-morado">
+        <div class="kpi-icon">#</div>
+        <div class="kpi-body">
+          <div class="kpi-num" id="k-total">0</div>
+          <div class="kpi-lbl">Total Registros</div>
+        </div>
+      </div>
+      <div class="kpi kpi-naranja">
+        <div class="kpi-icon">!</div>
+        <div class="kpi-body">
+          <div class="kpi-num" id="k-glosas">$0</div>
+          <div class="kpi-lbl">Total Glosado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-hd"><span>Distribución por Estado</span>
+          <div class="legend-row">
+            <span class="leg verde">Aprobado</span>
+            <span class="leg azul">En Proceso</span>
+            <span class="leg naranja">Apelación</span>
+            <span class="leg rojo">Objetado</span>
+            <span class="leg plomo">Cancelado</span>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="ch-estado"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span>Valores por Hospital (sin IVA)</span></div>
+        <div class="chart-wrap"><canvas id="ch-hospital"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:1.2rem">
+      <div class="card">
+        <div class="card-hd"><span>Comparativo Presentado vs Aprobado vs Glosado</span></div>
+        <div class="chart-wrap"><canvas id="ch-comparativo"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span>Últimos Trámites Registrados</span></div>
+        <div style="overflow-x:auto">
+          <table class="tbl" id="tbl-recientes">
+            <thead><tr>
+              <th>Hospital</th><th>N° Trámite</th><th>Mes Atención</th>
+              <th>Valor Pres.</th><th>Estado</th>
+            </tr></thead>
+            <tbody id="tbody-recientes"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,94 @@
+<!--
+  Vista: Trámites
+  Carpeta: views/listado
+  Este archivo es el HTML editable de la vista. Si lo
+  modificas manualmente, regenera también 'view.js' para
+  que los cambios se reflejen en el portal (o usa el
+  script 'regenerar_view_js.py' incluido en la raíz).
+-->
+<section class="view" id="view-listado">
+    <div class="view-header">
+      <h1>Trámites — 2020 Detalle</h1>
+      <p>Registro completo de todos los campos del sistema LOTES Y TRÁMITES</p>
+    </div>
+    <div class="filter-bar">
+      <input class="finput" id="f-buscar" placeholder="🔍 Buscar hospital, lote, N° trámite…" oninput="filtrarTramites()">
+      <select class="fsel" id="f-hospital" onchange="filtrarTramites()">
+        <option value="">Todos los hospitales</option>
+        <option>Hospital Luis Vernaza</option>
+        <option>Hospital Alfredo Paulson</option>
+        <option>Instituto de Neurociencias</option>
+        <option>Hospital Roberto Gilbert</option>
+        <option>Dispensario Benedicto XVI</option>
+        <option>JBG</option>
+      </select>
+      <select class="fsel" id="f-estado" onchange="filtrarTramites()">
+        <option value="">Todos los estados</option>
+        <option value="aprobado">Aprobado</option>
+        <option value="proceso">En Proceso</option>
+        <option value="apelacion">Apelación</option>
+        <option value="objetado">Objetado</option>
+        <option value="cancelado">Cancelado</option>
+        <option value="glosa">Glosa</option>
+      </select>
+      <select class="fsel" id="f-convenio" onchange="filtrarTramites()">
+        <option value="">Todos los convenios</option>
+        <option>IESS</option><option>IESS/SUBDIRECCION</option>
+        <option>ISSFA</option><option>ISSPOL</option>
+        <option>SSC</option><option>MSP</option><option>SPPAT</option>
+      </select>
+      <button class="btn-sm btn-outline" onclick="exportarCSV()">⬇ CSV</button>
+    </div>
+    <div class="card" style="overflow:hidden">
+      <div style="overflow-x:auto">
+        <table class="tbl tbl-sm" id="tbl-tramites">
+          <thead>
+            <tr>
+              <th>Hospital</th>
+              <th>IESS/Sub.</th>
+              <th>N° Trámite</th>
+              <th>Lote</th>
+              <th>#Exp.</th>
+              <th>Tipo Afil.</th>
+              <th>Mes Atenc.</th>
+              <th>Val.Pres.</th>
+              <th>IVA</th>
+              <th>Val.Sin IVA</th>
+              <th>Parte</th>
+              <th>F.Manual</th>
+              <th>F.Parte</th>
+              <th>Abono Base</th>
+              <th>Abono IVA</th>
+              <th>Saldo</th>
+              <th>F.Fact.</th>
+              <th>F.Apelac.</th>
+              <th>Canc.Apel.</th>
+              <th>Val.Rec.IESS</th>
+              <th>Val.Apr.IESS</th>
+              <th>IVA Apr.</th>
+              <th>Dif.Recl.</th>
+              <th>Ofic.Hosp.</th>
+              <th>Ofic.Apel.</th>
+              <th>Saldo x Cobrar</th>
+              <th>Val.Reg.Apel.</th>
+              <th>Obj.Apelada</th>
+              <th>Obj.Aceptada</th>
+              <th>Obj.Sin Resp.</th>
+              <th>Obj.según IESS</th>
+              <th>Glosa Final</th>
+              <th>Val.Levantado</th>
+              <th>IVA Levant.</th>
+              <th>Estado Hosp.</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-tramites"></tbody>
+        </table>
+      </div>
+      <div class="tbl-footer">
+        <span id="tbl-count">0 registros</span>
+        <div id="pagination" class="pagination"></div>
+      </div>
+    </div>
+  </section>

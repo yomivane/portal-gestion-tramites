@@ -1,0 +1,324 @@
+/* ================================================================
+   Facturación — estilos específicos
+   ================================================================ */
+
+/* ─── Barra de acciones (con botón Calcular) ─── */
+.fac-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: linear-gradient(135deg, #fff 0%, #fafbfd 100%);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--jbg-dorado);
+  border-radius: 10px;
+  padding: 12px 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--sh-exec);
+  flex-wrap: wrap;
+}
+.fac-sel-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+}
+.fac-sel-info strong {
+  color: var(--azul);
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  margin: 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+.fac-sel-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--azul);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, .15);
+  display: inline-block;
+}
+.fac-actions-right {
+  display: flex; gap: 10px; align-items: center;
+}
+.btn-fac-secundario {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 14px;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-fac-secundario:hover {
+  border-color: #b91c1c;
+  color: #b91c1c;
+  background: #fee2e2;
+}
+.btn-fac-calcular {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--jbg-dorado) 0%, var(--jbg-dorado-oscuro) 100%);
+  color: #fff;
+  border: none;
+  padding: 9px 22px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border-radius: 7px;
+  cursor: pointer;
+  box-shadow:
+    0 3px 10px rgba(201, 161, 74, .35),
+    inset 0 1px 0 rgba(255,255,255,.2);
+  transition: all .2s;
+}
+.btn-fac-calcular:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 5px 14px rgba(201, 161, 74, .45),
+    inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn-fac-calcular:active { transform: translateY(0); }
+
+/* ─── KPIs ─── */
+@keyframes facKpiFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(201, 161, 74, .55), var(--sh-exec); }
+  60%  { box-shadow: 0 0 0 6px rgba(201, 161, 74, 0),   var(--sh-exec); }
+  100% { box-shadow: 0 0 0 0 rgba(201, 161, 74, 0),     var(--sh-exec); }
+}
+.fac-kpi.fac-kpi-flash {
+  animation: facKpiFlash .65s ease-out;
+}
+
+.fac-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.fac-kpi {
+  background: linear-gradient(135deg, #fff 0%, #fafbfd 100%);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--azul);
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: var(--sh-exec);
+  transition: transform .18s, box-shadow .18s;
+}
+.fac-kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-exec-md);
+}
+.fac-kpi-azul         { border-left-color: var(--azul); }
+.fac-kpi-verde        { border-left-color: var(--verde); }
+.fac-kpi-verde-claro  { border-left-color: #4ade80; }
+.fac-kpi-dorado       { border-left-color: var(--jbg-dorado); }
+.fac-kpi-rojo         { border-left-color: #b91c1c; }
+.fac-kpi-rojo-claro   { border-left-color: #f87171; }
+
+.fac-kpi-lbl {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.fac-kpi-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: var(--jbg-azul-marino);
+  font-weight: 700;
+  letter-spacing: -.005em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.fac-kpi-sub {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ─── Card de tabla ─── */
+.fac-card { margin-bottom: 18px; }
+.fac-card .card-head {
+  display: flex;
+  align-items: center;
+}
+.fac-search {
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 12.5px;
+  outline: none;
+  width: 280px;
+  background: #fff;
+}
+.fac-search:focus {
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, .12);
+}
+
+/* ─── Tabla de trámites ─── */
+.fac-table-wrap {
+  overflow-x: auto;
+  width: 100%;
+}
+.fac-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  background: #fff;
+}
+.fac-table thead th {
+  background: linear-gradient(180deg, #1e3a8a 0%, var(--jbg-azul-marino) 100%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 9px 10px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--jbg-dorado);
+  vertical-align: middle;
+}
+.fac-table thead th.fac-num   { text-align: right; }
+.fac-table thead th.fac-col-check { text-align: center; width: 42px; }
+
+.fac-table tbody td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.fac-table tbody tr:hover td { background: #fafbfd; }
+.fac-table tbody tr.fac-selected td {
+  background: linear-gradient(90deg, rgba(29, 78, 216, .06) 0%, transparent 100%);
+}
+.fac-table .fac-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.fac-table .fac-col-check { text-align: center; }
+.fac-table input[type="checkbox"] {
+  width: 16px; height: 16px;
+  cursor: pointer;
+  accent-color: var(--azul);
+}
+.fac-table input[type="text"], .fac-table input[type="date"], .fac-table input[type="number"] {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: inherit;
+  font-size: 12px;
+  border-radius: 4px;
+  color: var(--text);
+}
+.fac-table input:hover { border-color: var(--border); background: #fff; }
+.fac-table input:focus {
+  border-color: var(--azul);
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(29,78,216,.1);
+}
+
+/* ─── Formulario inferior ─── */
+.fac-form-card { margin-bottom: 18px; }
+.fac-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px 16px;
+  align-items: end;
+}
+.fac-form-item {
+  display: flex; flex-direction: column; gap: 5px;
+}
+.fac-form-full { grid-column: 1 / -1; }
+.fac-form-item label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.fac-form-item input {
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  background: #fff;
+  transition: all .15s;
+}
+.fac-form-item input:focus {
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, .12);
+}
+
+/* Botón Cargar destacado (como en la imagen) */
+.fac-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+.btn-fac-cargar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--azul) 0%, #1e3a8a 100%);
+  color: #fff;
+  border: none;
+  padding: 11px 32px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow:
+    0 4px 14px rgba(29, 78, 216, .3),
+    inset 0 1px 0 rgba(255,255,255,.15);
+  transition: all .2s;
+}
+.btn-fac-cargar:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 6px 18px rgba(29, 78, 216, .4),
+    inset 0 1px 0 rgba(255,255,255,.15);
+}
+.btn-fac-cargar:active { transform: translateY(0); }
+
+/* ─── Historial ─── */
+.fac-historial-card .fac-table tbody td:first-child {
+  font-weight: 700;
+  color: var(--azul);
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background .15s;
+}
+.btn-icon:hover { background: var(--azul-claro); }
+.btn-icon.btn-icon-del:hover { background: #fee2e2; color: #b91c1c; }
+
+@media (max-width: 900px) {
+  .fac-form-grid { grid-template-columns: 1fr 1fr; }
+  .fac-search { width: 180px; }
+}
+@media (max-width: 600px) {
+  .fac-form-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,449 @@
+/* ================================================================
+   theme-executive.css
+   ----------------------------------------------------------------
+   Capa de presentación EJECUTIVA / GERENCIAL para el portal JBG.
+   Se carga DESPUÉS de styles.css, así que cualquier regla aquí
+   sobrescribe la base sin necesidad de tocar el CSS original.
+
+   Qué aporta:
+     1. Fondo institucional con gradiente sobrio + marca de agua
+        del logo oficial JBG (sutil, no interfiere con la lectura).
+     2. Sidebar con acabado premium (gradiente diagonal + acento
+        dorado institucional + brillo en el borde derecho).
+     3. Logo oficial de la JBG en el sidebar y en el topbar.
+     4. Topbar con acabado refinado (línea dorada inferior).
+     5. Cards y tablas con sombras más profundas y bordes finos.
+     6. Tipografía con un toque más editorial en los headings.
+   ================================================================ */
+
+:root {
+  /* Acentos institucionales */
+  --jbg-dorado:        #c9a14a;
+  --jbg-dorado-claro:  #e6c879;
+  --jbg-dorado-oscuro: #8b6f2f;
+  --jbg-azul-marino:   #0a1628;
+  --jbg-azul-noche:    #050d1c;
+
+  /* Sombras ejecutivas */
+  --sh-exec:    0 2px 14px rgba(15, 23, 42, .07), 0 1px 3px rgba(15, 23, 42, .04);
+  --sh-exec-md: 0 8px 28px rgba(15, 23, 42, .10), 0 2px 6px rgba(15, 23, 42, .05);
+  --sh-exec-lg: 0 18px 50px rgba(15, 23, 42, .14), 0 4px 12px rgba(15, 23, 42, .06);
+}
+
+/* ──────────────── FONDO EJECUTIVO PREMIUM ──────────────── */
+
+/* Paleta azul-blanco frío institucional. Tono limpio, claro y
+   profesional — recuerda el papel de oficina con marca de agua. */
+body {
+  background:
+    radial-gradient(ellipse 900px 700px at 92% -8%,  rgba(29, 78, 216, .045) 0%, transparent 55%),
+    radial-gradient(ellipse 800px 650px at -8% 105%, rgba(96, 165, 250, .035) 0%, transparent 55%),
+    radial-gradient(ellipse 600px 500px at 50% 100%, rgba(30, 58, 138, .025) 0%, transparent 60%),
+    linear-gradient(135deg, #f5f8fc 0%, #eef2f8 50%, #e6ecf5 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Líneas decorativas sutiles en azul */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    linear-gradient(180deg, rgba(29, 78, 216, .15) 0%, transparent 1px) top/100% 1px no-repeat,
+    linear-gradient(0deg, rgba(96, 165, 250, .12) 0%, transparent 1px) bottom/100% 1px no-repeat;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Marca de agua institucional con tono azul-grisáceo */
+.main::before {
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: calc(var(--sidebar-w) + (100vw - var(--sidebar-w)) / 2);
+  transform: translate(-50%, -50%);
+  width: min(680px, 58vw);
+  height: min(680px, 58vw);
+  background: url("../img/logo-jbg.png") center/contain no-repeat;
+  opacity: .055;
+  pointer-events: none;
+  z-index: 0;
+  filter: grayscale(60%) contrast(1.1);
+}
+
+.main > * { position: relative; z-index: 1; }
+
+.main::after {
+  content: "";
+  position: fixed;
+  top: 90px;
+  right: 50px;
+  width: 140px;
+  height: 140px;
+  background: url("../img/logo-jbg.png") center/contain no-repeat;
+  opacity: .045;
+  pointer-events: none;
+  z-index: 0;
+  filter: grayscale(80%);
+}
+
+/* ──────────────── SIDEBAR PREMIUM ──────────────── */
+
+.sidebar {
+  /* Arreglo del posicionamiento: 'inset-y:0' del CSS original no es
+     válido, hay que usar top/bottom explícitos para que el fixed
+     ocupe toda la altura. */
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  background:
+    linear-gradient(180deg,
+      var(--jbg-azul-marino) 0%,
+      var(--jbg-azul-noche) 100%);
+  box-shadow:
+    4px 0 24px rgba(0, 0, 0, .12),
+    inset -1px 0 0 rgba(201, 161, 74, .25);
+}
+
+/* Línea de acento dorado en el borde derecho del sidebar */
+.sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(201, 161, 74, .35) 20%,
+    rgba(201, 161, 74, .55) 50%,
+    rgba(201, 161, 74, .35) 80%,
+    transparent 100%);
+  pointer-events: none;
+}
+
+/* Cabecera del sidebar con el logo oficial */
+.sidebar-brand {
+  background:
+    linear-gradient(135deg,
+      rgba(201, 161, 74, .10) 0%,
+      rgba(201, 161, 74, .03) 50%,
+      transparent 100%);
+  padding: 1.25rem 1.1rem 1.15rem;
+  border-bottom: 1px solid rgba(201, 161, 74, .18);
+}
+
+/* Reemplazamos el "JBG" gradiente azul por el logo oficial
+   de la Junta de Beneficencia (1888). */
+.brand-logo {
+  width: 46px !important;
+  height: 46px !important;
+  background: #fff !important;
+  border-radius: 50% !important;
+  padding: 3px;
+  box-shadow:
+    0 0 0 2px var(--jbg-dorado),
+    0 4px 12px rgba(0, 0, 0, .25),
+    inset 0 0 0 1px rgba(255, 255, 255, .8);
+  font-size: 0 !important; /* oculta el texto "JBG" */
+  position: relative;
+  background-image: url("../img/logo-jbg.png") !important;
+  background-size: 38px 38px !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+
+.brand-title {
+  letter-spacing: .02em;
+  font-weight: 700;
+  font-size: 14.5px;
+  background: linear-gradient(135deg, #fff 0%, #d8e0ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brand-sub {
+  color: var(--jbg-dorado-claro) !important;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-size: 9.5px !important;
+  font-weight: 600;
+  margin-top: 2px;
+  display: block;
+}
+
+/* Etiquetas de grupo en mayúsculas con acento dorado */
+.nav-group-label {
+  color: var(--jbg-dorado) !important;
+  font-weight: 700 !important;
+  letter-spacing: .18em !important;
+  font-size: 10px !important;
+  opacity: .85;
+}
+
+/* Links del menú: estilo más refinado */
+.nav-link {
+  position: relative;
+  transition: all .22s ease;
+  border-left: 3px solid transparent;
+  padding-left: calc(1.1rem - 3px);
+}
+.nav-link:hover {
+  background: rgba(255, 255, 255, .04) !important;
+  border-left-color: rgba(201, 161, 74, .4);
+}
+.nav-link.active {
+  background: linear-gradient(90deg,
+    rgba(201, 161, 74, .14) 0%,
+    rgba(96, 165, 250, .10) 100%) !important;
+  color: #fff !important;
+  border-left-color: var(--jbg-dorado);
+  box-shadow: inset 0 0 0 1px rgba(201, 161, 74, .12);
+}
+.nav-link.active svg { color: var(--jbg-dorado-claro); }
+
+/* Facturación: destacado como elemento autónomo (estilo de la imagen
+   de referencia del usuario). Se ve como un "bloque" separado entre
+   DOCUMENTOS y REPORTES, con un fondo azul tenue y un borde dorado
+   más visible cuando está activo. */
+.nav-link.nav-facturacion {
+  background: linear-gradient(90deg,
+    rgba(96, 165, 250, .06) 0%,
+    rgba(201, 161, 74, .04) 100%) !important;
+  border-left-color: rgba(201, 161, 74, .35);
+  border-top: 1px solid rgba(201, 161, 74, .18);
+  border-bottom: 1px solid rgba(201, 161, 74, .18);
+}
+.nav-link.nav-facturacion:hover {
+  background: linear-gradient(90deg,
+    rgba(96, 165, 250, .10) 0%,
+    rgba(201, 161, 74, .07) 100%) !important;
+  border-left-color: var(--jbg-dorado-claro);
+}
+.nav-link.nav-facturacion.active {
+  background: linear-gradient(90deg,
+    rgba(201, 161, 74, .22) 0%,
+    rgba(96, 165, 250, .14) 100%) !important;
+  border-left-color: var(--jbg-dorado);
+  color: #fff !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(201, 161, 74, .25),
+    0 2px 10px rgba(0, 0, 0, .15);
+}
+
+/* Footer del sidebar más refinado */
+.sidebar-footer {
+  border-top: 1px solid rgba(201, 161, 74, .18) !important;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(0, 0, 0, .25) 100%);
+}
+.year-tag {
+  background: linear-gradient(135deg,
+    rgba(201, 161, 74, .15),
+    rgba(201, 161, 74, .08)) !important;
+  color: var(--jbg-dorado-claro) !important;
+  border: 1px solid rgba(201, 161, 74, .25);
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+/* ──────────────── TOPBAR EJECUTIVO ──────────────── */
+
+.topbar {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow:
+    0 1px 0 rgba(201, 161, 74, .35),
+    0 4px 18px rgba(15, 23, 42, .04) !important;
+  position: relative;
+}
+
+/* Logo institucional pequeño junto al título del topbar */
+.topbar-title {
+  font-family: 'Playfair Display', serif !important;
+  font-weight: 700;
+  font-size: 16px !important;
+  letter-spacing: .01em;
+  color: var(--jbg-azul-marino);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.topbar-title::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background: url("../img/logo-jbg.png") center/contain no-repeat;
+  flex-shrink: 0;
+  opacity: .9;
+}
+
+/* Avatar de Gerencia con acabado más serio */
+.avatar-chip {
+  background: linear-gradient(135deg,
+    var(--jbg-azul-marino),
+    #1e293b) !important;
+  color: var(--jbg-dorado-claro) !important;
+  border: 1px solid var(--jbg-dorado);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 5px 14px !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 8px rgba(10, 22, 40, .25);
+}
+
+/* Botón "Exportar CSV" más refinado */
+.btn-sm.btn-outline {
+  border: 1px solid var(--border);
+  background: #fff;
+  transition: all .18s;
+}
+.btn-sm.btn-outline:hover {
+  border-color: var(--jbg-dorado);
+  color: var(--jbg-dorado-oscuro);
+  box-shadow: 0 2px 8px rgba(201, 161, 74, .15);
+}
+
+/* ──────────────── HEADERS DE LAS VISTAS ──────────────── */
+
+.view-header h1 {
+  font-family: 'Playfair Display', serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -.005em;
+  color: var(--jbg-azul-marino);
+  position: relative;
+  padding-bottom: 14px;
+  margin-bottom: 8px;
+}
+.view-header h1::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 56px;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--jbg-dorado) 0%,
+    var(--jbg-dorado-claro) 100%);
+  border-radius: 2px;
+}
+.view-header p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: 14px;
+  font-style: italic;
+  letter-spacing: .005em;
+}
+
+/* ──────────────── CARDS Y TABLAS ──────────────── */
+
+.card {
+  border: 1px solid var(--border);
+  box-shadow: var(--sh-exec) !important;
+  background: rgba(255, 255, 255, .96) !important;
+  backdrop-filter: blur(8px);
+  transition: box-shadow .25s ease;
+}
+.card:hover {
+  box-shadow: var(--sh-exec-md) !important;
+}
+
+/* Cabecera de tablas con un toque dorado sutil */
+.tbl thead th, .rpt-tbl thead th {
+  background: linear-gradient(180deg, #fafbfd 0%, #f1f4fa 100%) !important;
+  color: var(--jbg-azul-marino) !important;
+  border-bottom: 2px solid rgba(201, 161, 74, .35) !important;
+}
+
+/* KPI cards con sombra más rica */
+.kpi {
+  box-shadow: var(--sh-exec) !important;
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-exec-md) !important;
+}
+
+/* ──────────────── BOTONES PRIMARIOS ──────────────── */
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--azul) 0%, #1e3a8a 100%) !important;
+  box-shadow:
+    0 2px 8px rgba(29, 78, 216, .25),
+    inset 0 1px 0 rgba(255, 255, 255, .15);
+  letter-spacing: .02em;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%) !important;
+  box-shadow:
+    0 4px 14px rgba(29, 78, 216, .35),
+    inset 0 1px 0 rgba(255, 255, 255, .15);
+  transform: translateY(-1px);
+}
+
+/* ──────────────── SCROLLBAR ──────────────── */
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--jbg-dorado) 0%, var(--jbg-dorado-oscuro) 100%);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+/* ──────────────── MODAL ──────────────── */
+
+.modal-box {
+  border-top: 4px solid var(--jbg-dorado) !important;
+  box-shadow: var(--sh-exec-lg) !important;
+}
+.modal-hd h3 {
+  font-family: 'Playfair Display', serif !important;
+  color: var(--jbg-azul-marino);
+  font-weight: 700;
+}
+
+/* ──────────────── MEMBRETE DEL OFICIO ──────────────── */
+
+/* Reemplazar el cuadrito 'JBG' del oficio impreso por el logo
+   oficial de la Junta de Beneficencia. */
+.membrete-logo {
+  background: #fff !important;
+  background-image: url("../img/logo-jbg.png") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  font-size: 0 !important;
+  border: 2px solid var(--jbg-dorado);
+  box-shadow: 0 0 0 1px rgba(201, 161, 74, .2);
+}
+
+/* ──────────────── RESPONSIVE: marca de agua más sutil ──────────────── */
+
+@media (max-width: 900px) {
+  .main::before {
+    width: min(420px, 70vw);
+    height: min(420px, 70vw);
+    opacity: .035;
+    left: 50%;
+  }
+  .main::after { display: none; }
+}
+
+/* Mejor legibilidad del topbar en móvil */
+@media (max-width: 600px) {
+  .topbar-title::before { width: 22px; height: 22px; }
+  .topbar-title { font-size: 14px !important; gap: 8px; }
+}

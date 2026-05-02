@@ -1,0 +1,137 @@
+<!--
+  Vista: Generador de Oficios
+  Carpeta: views/oficios
+  Este archivo es el HTML editable de la vista. Si lo
+  modificas manualmente, regenera también 'view.js' para
+  que los cambios se reflejen en el portal (o usa el
+  script 'regenerar_view_js.py' incluido en la raíz).
+-->
+<section class="view" id="view-oficios">
+    <div class="view-header">
+      <h1>Generador de Oficios</h1>
+      <p>Crear oficios de remisión de planillas a instituciones del sector público</p>
+    </div>
+    <div class="oficio-layout">
+      <div class="oficio-panel-izq">
+        <div class="card">
+          <div class="card-hd"><span>Datos del Oficio</span></div>
+          <div class="oficio-fields">
+            <div class="frow">
+              <div class="fg-item"><label>N° de Oficio *</label><input id="of-num" placeholder="JBG-DC-2026-001" oninput="renderOficio()"></div>
+              <div class="fg-item"><label>Fecha</label><input type="date" id="of-fecha" oninput="renderOficio()"></div>
+              <div class="fg-item"><label>Ciudad</label><input id="of-ciudad" value="Guayaquil" oninput="renderOficio()"></div>
+            </div>
+            <div class="frow">
+              <div class="fg-item"><label>Tratamiento</label>
+                <select id="of-trato" onchange="autoFillDestinatario()">
+                  <option>Señor Doctor</option><option>Señora Doctora</option>
+                  <option>Señor Teniente Coronel</option><option>Señor Teniente Coronel de E.M</option>
+                  <option>Señor Ingeniero</option><option>Señores</option><option>Señor</option>
+                </select>
+              </div>
+              <div class="fg-item"><label>Nombre destinatario</label><input id="of-nombre" placeholder="Nombre completo" oninput="renderOficio()"></div>
+            </div>
+            <div class="frow">
+              <div class="fg-item"><label>Cargo</label><input id="of-cargo" placeholder="Cargo del destinatario" oninput="renderOficio()"></div>
+              <div class="fg-item"><label>Institución</label>
+                <select id="of-inst" onchange="autoFillDestinatario()">
+                  <option value="">Seleccionar…</option>
+                  <option>INSTITUTO ECUATORIANO DE SEGURIDAD SOCIAL - IESS</option>
+                  <option>INSTITUTO ECUATORIANO DE SEGURIDAD SOCIAL CAMPESINO - IESS</option>
+                  <option>INSTITUTO DE SEGURIDAD SOCIAL DE LAS FUERZAS ARMADAS -ISSFA</option>
+                  <option>MINISTERIO DE SALUD PÚBLICA</option>
+                  <option>SERVICIO PUBLICO PARA PAGO DE ACCIDENTES DE TRÁNSITO-SPPAT</option>
+                  <option value="otro">Otra institución…</option>
+                </select>
+                <input id="of-inst-manual" style="display:none;margin-top:4px" placeholder="Escriba la institución" oninput="renderOficio()">
+              </div>
+            </div>
+            <hr>
+            <div class="frow">
+              <div class="fg-item"><label>Hospital remitente</label>
+                <select id="of-hosp" onchange="renderOficio()">
+                  <option value="">Seleccionar…</option>
+                  <option>Hospital Luis Vernaza</option>
+                  <option>Hospital Alfredo Paulson</option>
+                  <option>Instituto de Neurociencias</option>
+                  <option>Hospital Roberto Gilbert</option>
+                  <option>Dispensario Benedicto XVI</option>
+                  <option>JBG</option>
+                </select>
+              </div>
+              <div class="fg-item"><label>Mes de atención</label><input type="month" id="of-mes" oninput="renderOficio()"></div>
+            </div>
+            <div class="frow">
+              <div class="fg-item"><label>N° Expedientes</label><input type="number" id="of-exp" min="0" placeholder="0" oninput="renderOficio()"></div>
+              <div class="fg-item"><label>Valor ($)</label><input type="number" id="of-valor" step="0.01" placeholder="0.00" oninput="renderOficio()"></div>
+              <div class="fg-item"><label>Tipo de servicio</label>
+                <select id="of-servicio" onchange="renderOficio()">
+                  <option>Consulta Externa</option><option>Hospitalización</option>
+                  <option>Emergencia</option><option>Ambulatorio</option>
+                </select>
+              </div>
+            </div>
+            <div class="fg-item"><label>Texto adicional / asunto</label>
+              <textarea id="of-asunto" rows="3" placeholder="Texto complementario…" oninput="renderOficio()"></textarea>
+            </div>
+            <div class="frow">
+              <div class="fg-item"><label>Firmante</label><input id="of-firmante" placeholder="Nombre firmante" oninput="renderOficio()"></div>
+              <div class="fg-item"><label>Cargo firmante</label><input id="of-cargo-firm" placeholder="Cargo" oninput="renderOficio()"></div>
+            </div>
+            <div style="display:flex;gap:.6rem;margin-top:.8rem">
+              <button class="btn-primary" style="flex:1" onclick="guardarOficio()">💾 Guardar</button>
+              <button class="btn-outline" style="flex:1" onclick="imprimirOficio()">🖨 Imprimir</button>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:1rem">
+          <div class="card-hd"><span>Oficios Guardados</span></div>
+          <div id="lista-oficios" style="max-height:220px;overflow-y:auto;padding:.5rem"></div>
+        </div>
+      </div>
+      <div class="oficio-panel-der">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+          <span style="font-weight:600;font-size:13px">Vista Previa</span>
+          <button class="btn-outline btn-sm" onclick="imprimirOficio()">🖨 Imprimir Oficio</button>
+        </div>
+        <div class="oficio-doc" id="oficio-doc">
+          <div class="oficio-membrete">
+            <div class="membrete-logo">JBG</div>
+            <div><strong>JUNTA DE BENEFICENCIA DE GUAYAQUIL</strong><br><small>Dirección de Convenios del Sector Público</small></div>
+          </div>
+          <div class="oficio-nf">
+            <span id="prev-num">N° JBG-DC-2026-___</span>
+            <span id="prev-fecha"></span>
+          </div>
+          <p id="prev-ciudad" class="oficio-ciudad">Guayaquil.-</p>
+          <div class="oficio-dest">
+            <p id="prev-trato"><strong>Señor Doctor</strong></p>
+            <p id="prev-nombre-dest"></p>
+            <p id="prev-cargo-dest" style="color:#555"></p>
+            <p id="prev-inst" style="font-weight:600"></p>
+            <p>Ciudad.-</p>
+          </div>
+          <p class="oficio-saludo">De mis consideraciones:</p>
+          <div class="oficio-cuerpo">
+            <p>Adjunto al presente remito a su autoridad:</p>
+            <p>La planilla consolidada y el respectivo respaldo magnético de la información de los usuarios/pacientes atendidos en <span id="prev-hosp"><strong>[Hospital]</strong></span>, por <span id="prev-mes"><strong>[mes]</strong></span>.</p>
+            <table class="oficio-tbl">
+              <tr><th>Servicio</th><th>N° Expedientes</th><th>Valor ($)</th></tr>
+              <tr>
+                <td id="prev-serv">Consulta Externa</td>
+                <td id="prev-exp" style="text-align:center">—</td>
+                <td id="prev-val" style="text-align:right">—</td>
+              </tr>
+            </table>
+            <p id="prev-asunto" style="margin-top:.8rem"></p>
+          </div>
+          <p class="oficio-desp">Muy atentamente,</p>
+          <div class="oficio-firma">
+            <div class="firma-line"></div>
+            <p id="prev-firmante"><strong>[Firmante]</strong></p>
+            <p id="prev-cargo-firm" style="color:#555;font-size:.85rem"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

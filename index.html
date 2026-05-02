@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Gestión de Trámites — JBG / Convenios IESS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<!-- CSS globales -->
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="assets/css/dashboard_gerencial.css">
+<!-- Tema ejecutivo (acabado gerencial: fondo institucional + logo JBG + dorado) -->
+<link rel="stylesheet" href="assets/css/theme-executive.css">
+<!-- Estilos de los reportes financieros institucionales -->
+<link rel="stylesheet" href="assets/css/reports-financial.css">
+
+<!-- CSS específicos por vista (se cargan todos; cada uno sólo afecta a su vista) -->
+<link rel="stylesheet" href="views/dashboard/view.css">
+<link rel="stylesheet" href="views/listado/view.css">
+<link rel="stylesheet" href="views/nuevo/view.css">
+<link rel="stylesheet" href="views/rpt-lotes/view.css">
+<link rel="stylesheet" href="views/rpt-hospital/view.css">
+<link rel="stylesheet" href="views/rpt-valores/view.css">
+<link rel="stylesheet" href="views/rpt-apelaciones/view.css">
+<link rel="stylesheet" href="views/rpt-glosas/view.css">
+<link rel="stylesheet" href="views/rpt-estado/view.css">
+<link rel="stylesheet" href="views/oficios/view.css">
+<link rel="stylesheet" href="views/consulta/view.css">
+<link rel="stylesheet" href="views/rpt-oficios/view.css">
+<link rel="stylesheet" href="views/facturacion/view.css">
+</head>
+<body>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">JBG</div>
+    <div>
+      <span class="brand-title">Convenios IESS</span>
+      <span class="brand-sub">Sector Público</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-group-label">GESTIÓN</div>
+    <a class="nav-link" href="#rpt-estado" data-view="rpt-estado">
+      <svg viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg>
+      Resumen Gerencial
+    </a>
+    <a class="nav-link" href="#listado" data-view="listado">
+      <svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+      Trámites
+    </a>
+    <a class="nav-link" href="#nuevo" data-view="nuevo">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/></svg>
+      Nuevo / Consultar Trámite
+    </a>
+
+    <div class="nav-group-label" style="margin-top:1.4rem">DOCUMENTOS</div>
+    <a class="nav-link" href="#oficios" data-view="oficios">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4zm7 5a1 1 0 10-2 0v1H8a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd"/></svg>
+      Generador de Oficios
+    </a>
+    <a class="nav-link" href="#rpt-oficios" data-view="rpt-oficios">
+      <svg viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
+      Reporte de Oficios
+    </a>
+
+    <a class="nav-link nav-facturacion" href="#facturacion" data-view="facturacion" style="margin-top:1.4rem">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm3 4a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm0 3a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm0 3a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+      Facturación
+    </a>
+
+    <div class="nav-group-label" style="margin-top:1.4rem">REPORTES</div>
+    <a class="nav-link active" href="#dashboard" data-view="dashboard">
+      <svg viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 8a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1v-4zm8-8a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V4zm0 8a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-link" href="#rpt-lotes" data-view="rpt-lotes">
+      <svg viewBox="0 0 20 20"><path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3z"/></svg>
+      MSP — Saldos
+    </a>
+    <a class="nav-link" href="#rpt-hospital" data-view="rpt-hospital">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"/></svg>
+      IESS — Saldos
+    </a>
+    <a class="nav-link" href="#rpt-valores" data-view="rpt-valores">
+      <svg viewBox="0 0 20 20"><path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/></svg>
+      ISSFA / ISSPOL
+    </a>
+    <a class="nav-link" href="#rpt-apelaciones" data-view="rpt-apelaciones">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+      SPPAT
+    </a>
+    <a class="nav-link" href="#rpt-glosas" data-view="rpt-glosas">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 7l2.55 2.4A1 1 0 0116 11H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/></svg>
+      Expedientes
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="year-tag">2020 – 2026</div>
+    <small>Sistema Trámites IESS v2.0</small>
+  </div>
+</aside>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main class="main" id="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="topbar-title" id="topbar-title">Dashboard</span>
+    <div class="topbar-right">
+      <button class="btn-sm btn-outline" onclick="exportarCSV()">⬇ Exportar CSV</button>
+      <div class="avatar-chip">Gerencia</div>
+    </div>
+  </header>
+
+  <!-- ╔═══════════════════════════════════════════════════════════╗
+       ║ CONTENEDOR ÚNICO DE VISTAS                                ║
+       ║ El router.js monta aquí la vista que corresponde al clic  ║
+       ║ del menú (o al hash de la URL), tomando su HTML de        ║
+       ║ window.PORTAL_VIEWS[<id>] que es poblado por los scripts  ║
+       ║ views/<id>/view.js (uno por cada opción del menú).        ║
+       ╚═══════════════════════════════════════════════════════════╝ -->
+  <div id="views-container"></div>
+
+</main>
+
+<!-- MODAL DETALLE (global) -->
+<div class="modal-bg" id="modal-bg" onclick="cerrarModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hd">
+      <h3 id="modal-title">Detalle del Trámite</h3>
+      <button onclick="cerrarModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- TOAST (global) -->
+<div class="toast" id="toast"></div>
+
+<!-- ═════════════ SCRIPTS ═════════════ -->
+
+<!-- 1) Chart.js (dependencia compartida) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<!-- 2) HTML de cada vista empaquetado como JS (se registra en window.PORTAL_VIEWS) -->
+<script src="views/dashboard/view.js"></script>
+<script src="views/listado/view.js"></script>
+<script src="views/nuevo/view.js"></script>
+<script src="views/rpt-lotes/view.js"></script>
+<script src="views/rpt-hospital/view.js"></script>
+<script src="views/rpt-valores/view.js"></script>
+<script src="views/rpt-apelaciones/view.js"></script>
+<script src="views/rpt-glosas/view.js"></script>
+<script src="views/rpt-estado/view.js"></script>
+<script src="views/oficios/view.js"></script>
+<script src="views/consulta/view.js"></script>
+<script src="views/rpt-oficios/view.js"></script>
+<script src="views/facturacion/view.js"></script>
+
+<!-- 3) Datos y plantillas de los reportes financieros institucionales -->
+<script src="assets/js/reports-data.js"></script>
+<script src="assets/js/reports-render.js"></script>
+
+<!-- 4) Router: monta la vista correcta en el contenedor al hacer clic -->
+<script src="assets/js/router.js"></script>
+
+<!-- 5) Lógica principal del portal -->
+<script src="assets/js/app.js"></script>
+<script src="assets/js/dashboard_gerencial.js"></script>
+
+</body>
+</html>

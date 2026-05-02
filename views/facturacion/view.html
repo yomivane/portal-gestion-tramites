@@ -1,0 +1,164 @@
+<!--
+  Vista: Facturación
+  Carpeta: views/facturacion
+  Pantalla solicitada por el usuario para gestionar facturas de
+  trámites. Replica la estructura de la imagen adjunta:
+    - 6 KPIs arriba (Total Presentado / Aprobado con/sin IVA /
+      Total Factura / Objetado con/sin IVA)
+    - Tabla de trámites con checkboxes para selección múltiple
+    - Formulario inferior para cargar la factura
+-->
+<section class="view" id="view-facturacion">
+    <div class="view-header">
+      <h1>Facturación</h1>
+      <p>Selecciona los trámites a facturar, registra el comprobante y guarda la factura</p>
+    </div>
+
+    <!-- ─── BARRA DE ACCIONES ─── -->
+    <div class="fac-actions-bar">
+      <div class="fac-sel-info">
+        <span class="fac-sel-dot"></span>
+        <span><strong id="fac-sel-count">0</strong> trámite<span id="fac-sel-plural">s</span> seleccionado<span id="fac-sel-plural2">s</span></span>
+      </div>
+      <div class="fac-actions-right">
+        <button class="btn-fac-secundario" onclick="limpiarSeleccionFac()" title="Quitar todas las selecciones">
+          ✕ Limpiar selección
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── KPIs ─── -->
+    <div class="fac-kpis" id="fac-kpis">
+      <div class="fac-kpi fac-kpi-azul">
+        <div class="fac-kpi-lbl">Total Presentado</div>
+        <div class="fac-kpi-val" id="kpi-total-presentado">0</div>
+        <div class="fac-kpi-sub">Suma de trámites seleccionados</div>
+      </div>
+      <div class="fac-kpi fac-kpi-verde">
+        <div class="fac-kpi-lbl">Total Aprobado con IVA</div>
+        <div class="fac-kpi-val" id="kpi-total-aprob-iva">0</div>
+        <div class="fac-kpi-sub">Aprobado + IVA</div>
+      </div>
+      <div class="fac-kpi fac-kpi-verde-claro">
+        <div class="fac-kpi-lbl">Total Aprobado sin IVA</div>
+        <div class="fac-kpi-val" id="kpi-total-aprob-sin-iva">0</div>
+        <div class="fac-kpi-sub">Aprobado base</div>
+      </div>
+      <div class="fac-kpi fac-kpi-dorado">
+        <div class="fac-kpi-lbl">Total Factura</div>
+        <div class="fac-kpi-val" id="kpi-total-factura">0</div>
+        <div class="fac-kpi-sub">Importe a facturar</div>
+      </div>
+      <div class="fac-kpi fac-kpi-rojo">
+        <div class="fac-kpi-lbl">Total Objetado con IVA</div>
+        <div class="fac-kpi-val" id="kpi-total-obj-iva">0</div>
+        <div class="fac-kpi-sub">Objeción + IVA</div>
+      </div>
+      <div class="fac-kpi fac-kpi-rojo-claro">
+        <div class="fac-kpi-lbl">Total Objetado sin IVA</div>
+        <div class="fac-kpi-val" id="kpi-total-obj-sin-iva">0</div>
+        <div class="fac-kpi-sub">Objeción base</div>
+      </div>
+    </div>
+
+    <!-- ─── TABLA DE TRÁMITES PARA FACTURAR ─── -->
+    <div class="card fac-card">
+      <div class="card-head">
+        <h2>Trámites disponibles para facturación</h2>
+        <div style="margin-left:auto; display:flex; gap:8px; align-items:center">
+          <input type="search" id="fac-buscar" class="fac-search" placeholder="🔍 Buscar por N° trámite o lote…" oninput="renderFacturacionTabla()">
+          <span class="badge badge-info" id="fac-count">0 trámites</span>
+        </div>
+      </div>
+      <div class="card-body" style="padding:0">
+        <div class="fac-table-wrap">
+          <table class="fac-table">
+            <thead>
+              <tr>
+                <th class="fac-col-check">
+                  <input type="checkbox" id="fac-check-all" onchange="toggleSelectAllFac()">
+                </th>
+                <th>N° Trámite</th>
+                <th>Lote</th>
+                <th>Hospital</th>
+                <th class="fac-num">Presentado</th>
+                <th class="fac-num">Aprobado<br>con IVA</th>
+                <th class="fac-num">Aprobado<br>sin IVA</th>
+                <th class="fac-num">Objetado<br>con IVA</th>
+                <th class="fac-num">Objetado<br>sin IVA</th>
+                <th>Factura</th>
+                <th>Fecha Factura</th>
+                <th class="fac-num">Importe</th>
+                <th>Concepto</th>
+              </tr>
+            </thead>
+            <tbody id="fac-tabla-body">
+              <tr><td colspan="13" style="padding:30px;text-align:center;color:var(--text-muted)">
+                Sin trámites cargados todavía. Registra trámites desde "Nuevo / Consultar Trámite" para que aparezcan aquí.
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── FORMULARIO DE CARGA DE FACTURA ─── -->
+    <div class="card fac-form-card">
+      <div class="card-head">
+        <h2>Cargar Factura</h2>
+        <span class="badge badge-warn">Aplica a los trámites seleccionados</span>
+      </div>
+      <div class="card-body">
+        <div class="fac-form-grid">
+          <div class="fac-form-item">
+            <label>Núm. Factura</label>
+            <input type="text" id="fac-num-factura" placeholder="Ej: 001-001-000123456">
+          </div>
+          <div class="fac-form-item">
+            <label>Fecha Factura</label>
+            <input type="date" id="fac-fecha-factura">
+          </div>
+          <div class="fac-form-item">
+            <label>Importe Total</label>
+            <input type="number" step="0.01" id="fac-importe-total" placeholder="0.00">
+          </div>
+          <div class="fac-form-item fac-form-full">
+            <label>Concepto Factura</label>
+            <input type="text" id="fac-concepto" placeholder="Concepto / descripción de la factura">
+          </div>
+          <div class="fac-form-actions">
+            <button class="btn-fac-cargar" onclick="cargarFactura()">
+              <span style="font-size:16px">⬆</span>
+              <span>Cargar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── HISTORIAL DE FACTURAS ─── -->
+    <div class="card fac-historial-card" id="fac-historial-card" style="display:none">
+      <div class="card-head">
+        <h2>Facturas registradas</h2>
+        <span class="badge badge-success" id="fac-historial-count">0</span>
+      </div>
+      <div class="card-body" style="padding:0">
+        <div class="fac-table-wrap">
+          <table class="fac-table">
+            <thead>
+              <tr>
+                <th>N° Factura</th>
+                <th>Fecha</th>
+                <th class="fac-num">Importe</th>
+                <th>Concepto</th>
+                <th class="fac-num">Trámites</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="fac-historial-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+</section>
